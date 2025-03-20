@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lab01_5.ino                                        :+:      :+:    :+:   */
+/*   Lab01_7.ino                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smodesto <smodesto@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 22:07:59 by smodesto          #+#    #+#             */
-/*   Updated: 2025/03/19 22:07:59 by smodesto         ###   ########.fr       */
+/*   Created: 2025/03/19 22:08:33 by smodesto          #+#    #+#             */
+/*   Updated: 2025/03/19 22:08:33 by smodesto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,18 @@
 
 void setup(void) {
   // set (PORTB3 = Pin 10) as input (button)
-  DDRB &= ~(1 << DDB2); 
+  DDRB = DDRB &~ (1 << DDB2); 
 
   // Keeps the pin HIGH while the button isn't pressed
-  // PORTB |=  (1 << PB2);
+  PORTB = PORTB | (1 << PB2);
 
   // set (PORTB3 = Pin 11) as output (LED)
-  DDRB |= (1 << DDB3); 
+  DDRB = DDRB | (1 << DDB3); 
 }
 
 void loop(void) {
 
-  static uint8_t PrevState = HIGH;
+  static uint8_t PrevState = 1;
   uint8_t        CurrentState = !(PINB & (1 << PB2)); 
   
   if (CurrentState != PrevState) {        // Checks changes of state
@@ -41,7 +41,7 @@ void loop(void) {
     CurrentState = !(PINB & (1 << PB2));  // Re-reading
 
     if (CurrentState == HIGH){
-      PORTB = PORTB ^ (1 << PB3);         // Toggle LED state
+      PORTB = PORTB ^ (1 << PB3); // Switchs LED state when button is pressed
     }
     PrevState = CurrentState;
   }

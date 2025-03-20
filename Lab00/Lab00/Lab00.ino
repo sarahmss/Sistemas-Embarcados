@@ -1,6 +1,6 @@
 /*
   DDRx = Data direction register ->  (Input = 0 | Output = 1)
-  PORTx = P
+  PORTx = 
     - Write data to the pins configured as outputs or to 
       enable internal pull-up resistors for pins configured as inputs.
   PINx = Input Pins Register ->

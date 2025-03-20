@@ -1,15 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Lab01_6.ino                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smodesto <smodesto@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 22:06:16 by smodesto          #+#    #+#             */
+/*   Updated: 2025/03/19 22:06:16 by smodesto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
   DDRx = Data direction register ->  (Input = 0 | Output = 1)
-  PORTx = P
-    - Write data to the pins configured as outputs or to 
-      enable internal pull-up resistors for pins configured as inputs.
+  PORTx = Write data to the pins configured as outputs or to 
+          enable internal pull-up resistors for pins configured as inputs.
   PINx = Input Pins Register -> Reads the state of the pins
 */
 
 #define HIGH 1
 #define LOW  0
 
-uint8_t ChangeState(uint8_t CurrentState, uint8_t PrevState, uint8_t PBx) {
+/*
+  @brief: Checks for a change in the button state before toggling the LED state. 
+          Implements a debounce delay to prevent unstable button readings.
+
+  @param CurrentState: The current state of the button (HIGH or LOW).
+  @param PrevState: The previous state of the button to detect changes.
+  @param PBx: The pin associated with the button (ex:. PB2).
+
+  @return The updated button state after verification and debouncing.
+*/
+uint8_t ChangeState(uint8_t CurrentState, uint8_t PrevState, uint8_t PBx)
+{  
   if (CurrentState != PrevState) {        // Checks changes of state
     _delay_ms(50);                        // Debouncing
     CurrentState = !(PINB & (1 << PBx));  // Re-reading
