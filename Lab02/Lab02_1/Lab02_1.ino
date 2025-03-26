@@ -64,21 +64,6 @@ ISR (INT0_vect) {
   PORTB ^= LED;
 } 
 
-/*
-  @brief: Checks for a change in the button state before toggling the LED state. 
-          Implements a debounce delay to prevent unstable button readings.
-
-  @param CurrentState: The current state of the button (HIGH or LOW).
-  @param PrevState: The previous state of the button to detect changes.
-  @param PBx: The pin associated with the button (ex:. PB2).
-
-  @return The updated button state after verification and debouncing.
-*/
-
-
-void setup(void) {
-
-}
 
 void loop(void) {
 
