@@ -11,14 +11,6 @@
 /* ************************************************************************** */
 
 /*
-  DDRx = Data direction register ->  (Input = 0 | Output = 1)
-  PORTx = Write data to the pins configured as outputs or to 
-          enable internal pull-up resistors for pins configured as inputs.
-  PINx = Input Pins Register -> Reads the state of the pins
-*/
-
-
-/*
   1. Definir pino x como entrada (Botão)
   2. Configurar Pull-up (Colocar o pino inicialmente em estado HIGH)
   3. Definir pino y como saida (LED)
@@ -28,10 +20,8 @@
   7. Definir rotina de interrupção == mudar o estado do led
 */
 
-#define HIGH 1
-#define LOW  0
-#define LED  PB4 // pin 12 (PB4)
-#define BUTTON PD3 // pin 03 (PD3)
+#define LED    (1 << PB4)  // pin 12 (PB4)
+#define BUTTON (1 << PD3)  // pin 3 (PD3)
 
 void setup(void) {
 
@@ -48,11 +38,12 @@ void setup(void) {
   PORTD |= BUTTON;
 
   // Enable External Interrupts in INT1  == Pin 3
-  EIMSK |= (1 << INT1) 
+  EIMSK |= (1 << INT1); 
 
-  // Bits to set mood in INT1 01 = CHANGE
-  EICRA |= (0 << ISC11) | (1 << ISC10);
-
+  // Bits to set mode in INT1 01 = CHANGE
+  EICRA &= ~(1 << ISC11);  // Clear ISC11
+  EICRA |=  (1 << ISC10);  // Set ISC10
+  
   // Enable External Interrupts globally
   sei();
 }
@@ -60,9 +51,9 @@ void setup(void) {
 /*
   @brief: defines the routine for INT0 interrupt
 */
-ISR (INT0_vect) { 
-  PORTB ^= LED;
-} 
+ISR(INT1_vect) {
+  PORTB ^= LED; // Toggle LED
+}
 
 
 void loop(void) {
