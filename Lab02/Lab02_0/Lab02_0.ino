@@ -51,8 +51,6 @@ void setup(void) {
 
   // Enable External Interrupts globally
   sei();
-
-
 }
 
 /*
