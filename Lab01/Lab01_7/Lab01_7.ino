@@ -36,26 +36,12 @@
   10. repetir passos 6 ao 9
 */
 
-
-uint8_t ChangeState(uint8_t CurrentState, uint8_t PrevState, uint8_t PBx)
-{  
-  if (CurrentState != PrevState) {        // Checks changes of state
-    _delay_ms(50);                        // Debouncing
-    CurrentState = !(PINB & (1 << PBx));  // Re-reading
-
-    if (CurrentState == HIGH) {
-      PORTB ^= (1 << PB3);                // Toggle LED state
-    }
-  }
-  return CurrentState;
-}
-
 void setup(void) {
-  // set (PORTB3 = Pin 10) as input (button)
+  // set (PORTB3 = Pin 10) as input 
   DDRB = DDRB &~ (1 << DDB2); 
 
-  // Keeps the pin HIGH while the button isn't pressed
-  PORTB = PORTB | (1 << PB2);
+  // // Keeps the pin HIGH while the button isn't pressed
+  // PORTB = PORTB | (1 << PB2);
 
   // set (PORTB3 = Pin 11) as output (LED)
   DDRB = DDRB | (1 << DDB3); 
@@ -63,10 +49,13 @@ void setup(void) {
 
 void loop(void) {
 
-  static uint8_t PrevState = 0;
+  static uint8_t PrevState = 1;
   uint8_t        CurrentState = !(PINB & (1 << PB2)); 
-  
-  PrevStateB1 = ChangeState(CurrentState, PrevState, PB2);
+
+  if (CurrentState != PrevState) {
+    PORTB ^= (1 << PB3);                // Toggle LED state
+    PrevState = CurrentState;
+  }
 }
 
 
