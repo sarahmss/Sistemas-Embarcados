@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lab01_6.ino                                        :+:      :+:    :+:   */
+/*   Lab02_2.ino                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smodesto <smodesto@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -17,17 +17,19 @@
   5. Definir condição de interrupção == borda de descida
   6. Habilitar interrupções globalmente
   7. Definir rotina de interrupção 
-    7.1 Verificar 
+    7.1 Definir variavel z responsável por contar
+    7.2 Verificar se z atingiu o valor esperado
+      7.2.1 Caso tenha atingido, alterar o estado da porta
+    7.3 Incrementar z a cada interrupção
 */
 
 
-#define T 100                  // 0.1s = 100ms
+// #define T 100                  // 0.1s = 100ms
 #define OUTPUT_PIN  (1 << PB4) // pin 12 (PB4)
 #define INPUT_PIN   (1 << PD3) // pin 3 (PD3)
 
 void setup(void) {
-  // Serial.begin(2000000);
-
+  Serial.begin(115200);
 
   // Disable External Interrupts globally
   cli();
@@ -44,7 +46,7 @@ void setup(void) {
   // Enable External Interrupts in INT1  == Pin 3
   EIMSK |= (1 << INT1); 
 
-  // Bits to set mode in INT1 10 = Falling
+  // Bits to set mode in INT1 10 = FALLING
   EICRA |=  (1 << ISC11);  // Set ISC11
   EICRA &= ~(1 << ISC10);  // Clear ISC10
   
@@ -58,9 +60,8 @@ void setup(void) {
 ISR(INT1_vect) {
   static uint16_t Counter = 1;
 
-  if (Counter == 250){
+  if (Counter == 500){
     PORTB ^= OUTPUT_PIN;
-    _delay_ms(T / 2);
     Counter = 1;
   }
   Counter += 1;
@@ -68,9 +69,5 @@ ISR(INT1_vect) {
 
 
 void loop(void) {
-  // int Timer = analogRead(A0);
-  // int Out = analogRead(A1);
 
-  // Serial.print("Timer: "); Serial.println(Timer);
-  // Serial.print("Output: ");Serial.println(Out);
 }

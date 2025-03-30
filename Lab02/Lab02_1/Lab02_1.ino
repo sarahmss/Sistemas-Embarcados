@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lab01_6.ino                                        :+:      :+:    :+:   */
+/*   Lab02_1.ino                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smodesto <smodesto@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -24,6 +24,7 @@
 #define BUTTON (1 << PD3)  // pin 3 (PD3)
 
 void setup(void) {
+  Serial.begin(115200);
 
   // Disable External Interrupts globally
   cli();
@@ -40,9 +41,9 @@ void setup(void) {
   // Enable External Interrupts in INT1  == Pin 3
   EIMSK |= (1 << INT1); 
 
-  // Bits to set mode in INT1 01 = CHANGE
-  EICRA &= ~(1 << ISC11);  // Clear ISC11
-  EICRA |=  (1 << ISC10);  // Set ISC10
+  // Bits to set mode in INT1 10 = FALLING
+  EICRA |=  (1 << ISC11);  // Set ISC11
+  EICRA &= ~(1 << ISC10);  // Clear ISC10
   
   // Enable External Interrupts globally
   sei();
@@ -52,7 +53,13 @@ void setup(void) {
   @brief: defines the routine for INT1 interrupt
 */
 ISR(INT1_vect) {
+  static uint8_t Counter = 1;
+
   PORTB ^= LED; // Toggle LED
+
+  Counter += 1;
+  Serial.print("Contador: ");
+  Serial.println(Counter);
 }
 
 
