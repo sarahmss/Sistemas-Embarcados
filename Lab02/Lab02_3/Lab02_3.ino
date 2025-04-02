@@ -37,15 +37,16 @@
 
 typedef enum e_state
 {
-  F_100 = 100,
-  F_200 = 200,
-  F_400 = 400
-}				t_state;
+  F_1000 = 5,
+  F_500 = 11,  
+  F_250 = 21   
+} t_state;
 
-volatile t_state State = F_100;
+volatile t_state State = F_1000;
+volatile uint8_t Mood = 0;  // False is 0, True is 1
 
 void setup(void) {
-
+  Serial.begin(9600);
   // Disable External Interrupts globally
   cli();
 
@@ -81,7 +82,7 @@ void setup(void) {
 }
 
 /*
-  @brief: defines the routine for INT1 interrupt
+  @brief: defines the routine for INT1 interrupt (INPUT_PIN_3)
 */
 ISR(INT1_vect) {
   static uint16_t Counter = 1;
@@ -94,23 +95,23 @@ ISR(INT1_vect) {
 }
 
 /*
-  @brief: defines the routine for INT1 interrupt
+  @brief: defines the routine for INT0 interrupt (INPUT_PIN_2)
 */
 ISR(INT0_vect) {
   static bool Mood = false;
 
   if (!Mood){
-    State = F_200;
+    State = F_500;
     Mood = true;
   }
   
   if (Mood){
-    State = F_400;
+    State = F_250;
     Mood = false;
   }
 }
 
 
 void loop(void) {
- 
+
 }
