@@ -38,8 +38,8 @@
 typedef enum e_state
 {
   F_1000 = 5,
-  F_500 = 11,  
-  F_250 = 21   
+  F_500 = 11,  // 2.5
+  F_250 = 21   // 1.5
 } t_state;
 
 volatile t_state State = F_1000;
@@ -105,12 +105,11 @@ ISR(INT0_vect) {
     Mood = true;
   }
   
-  if (Mood){
+  else if (Mood){
     State = F_250;
     Mood = false;
   }
 }
-
 
 void loop(void) {
 
