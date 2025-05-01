@@ -14,6 +14,7 @@
 #include <avr/interrupt.h>
 
 #define OUTPUT_PIN      (1 << PB2) // Pin  10 (PB2 == OC1B)
+#define INPUT_PIN       (1 << PD2)  // pin 2 (PD2 == INT0)
 
 // F_pwm = F_clk/(N * (TOP + 1)) ; F_clk = 16 MHz   
   
@@ -23,10 +24,26 @@
 #define DUTY_CYCLE_50   250000        
 
 
+volatile uint cycles = 0;  // 
+
+
 void setup(void)
 {
-
+    Serial.begin(9600);
     cli();
+// ================================== Detector de Zero ================================
+    // set INPUT_PIN as input
+    DDRD &= ~INPUT_PIN;
+
+    // Enable External Interrupts in INT0  == Pin 2
+    EIMSK |= (1 << INT0);
+
+    // Bits to set mode in INT0 01 = CHANGE
+    EICRA &= ~(1 << ISC00);  // Clear ISC00
+    EICRA |=  (1 << ISC01);  // Set ISC01
+
+
+// ================================== Temporizador ====================================
     // 
     DDRB |= OUTPUT_PIN;
     PORTB &= ~OUTPUT_PIN;
@@ -71,8 +88,16 @@ void setup(void)
 ISR (TIMER1_COMPB_vect)
 {
     PORTB ^= OUTPUT_PIN;                // Toggle LED state
-}
+    Serial.print("Quantidade de ciclos: ");
+    Serial.println(cycles);}
 
+
+/*
+  @brief: defines the routine for INT0 interrupt (INPUT_PIN)
+*/
+ISR(INT0_vect) {
+    cycles++; 
+}
 
 void loop(void){
 

@@ -46,7 +46,7 @@ volatile t_state State = F_1000;
 volatile uint8_t Mood = 0;  // False is 0, True is 1
 
 void setup(void) {
-  Serial.begin(9600);
+  .begin(9600);
   // Disable External Interrupts globally
   cli();
 
